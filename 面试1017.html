@@ -187,10 +187,7 @@
       bodyBox.innerHTML = "<table id='calendarTable' class='calendar-table'>" +
         _headHtml + _bodyHtml +
         "</table>";
-      // 添加到calendar div中
       calendar.appendChild(bodyBox);
-      // console.log("bodyBox", bodyBox)
-      // console.log("calendar", calendar)
     }
 
     /**
@@ -226,7 +223,6 @@
      */
     function inputData() {
       var inputDay = document.getElementById('input').value
-      // console.log("inputDay", inputDay)
       return inputDay
     }
 
@@ -252,14 +248,10 @@
         var _thisDay = new Date(_year, _month - 1, i + 1 - _firstDay.getDay());
         var _thisDayStr = getDateStr(_thisDay);  //格式化日期为字符串
         _tds[i].innerText = _thisDay.getDate();
-        // console.log("444_tds[i]", _tds[i])
-        // console.log("_tds[i].innerText", _tds[i].innerText)
         _tds[i].setAttribute('data', _thisDayStr);
         if (_thisDayStr == inputData()) {    // 根据需求，只高亮输入的日期
           _tds[i].className = 'currentDay';
         } else if (_thisDayStr.substr(0, 6) == getDateStr(_firstDay).substr(0, 6)) {
-          // console.log("_thisDayStr.substr(0, 6)", _thisDayStr.substr(0, 6))
-          // console.log("getDateStr(_firstDay).substr(0, 6)", getDateStr(_firstDay).substr(0, 6))
           _tds[i].className = 'currentMonth';  // 如果循环的日期的月份是当前月，就设置类名，
         } else {    // 其他月
           _tds[i].className = 'otherMonth';
@@ -360,22 +352,20 @@
 
     // input输入改变，显示日历
     function showCalender() {
-      // 设置calendar div中的html部分
-      renderHtml()
-      // 表格中显示日期
-      showCalendarData()
-      // 绑定月事件
-      bindEventMonth()
-      // 绑定年
-      bindEventYear()
-      // 绑定日期弹框
-      bindAlert()
+      var inputValue = inputData()
+      var regex = /^\d{8}$/
+      console.log("regex.test(inputValue)", regex.test(inputValue))
+      if (regex.test(inputValue)) {
+        renderHtml()
+        showCalendarData()
+        bindEventMonth()
+        bindEventYear()
+        bindAlert()
+      } else {
+        alert("输入日期不符合规范，请重新输入")
+        location.reload()
+      }
     }
-
-    // 根据 input 的值高亮 对应的日期
-
-
   </script>
 </body>
-
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +16,7 @@
     input {
       width: 250px;
     }
+
     /**
  * 设置日历的大小
  */
@@ -224,17 +226,16 @@
      */
     function inputData() {
       var inputDay = document.getElementById('input').value
-      console.log("inputDay", inputDay)
+      // console.log("inputDay", inputDay)
       return inputDay
     }
-
-
 
     /**
      * 表格中显示的数据
      */
     function showCalendarData() {
-      console.log("dateObj", dateObj)
+
+      // console.log("dateObj", dateObj)
       var _year = dateObj.getDate().getFullYear();
       var _month = dateObj.getDate().getMonth() + 1;
       var _dateStr = getDateStr(dateObj.getDate());
@@ -244,21 +245,22 @@
       var titleStr = _dateStr.substr(0, 4) + "年" + _dateStr.substr(4, 2) + "月";
       calendarTitle.innerText = titleStr;
 
-      // 设置表格中的日期数据
       var _table = document.getElementById("calendarTable");
       var _tds = _table.getElementsByTagName("td");
-      var _firstDay = new Date(_year, _month - 1, 1);  // 当前月第一天
-      // console.log("_firstDay", _firstDay)
+      var _firstDay = new Date(_year, _month - 1, 1);  // 当前月第一天，根据传入的参数拿到标准的时间
       for (var i = 0; i < _tds.length; i++) {
         var _thisDay = new Date(_year, _month - 1, i + 1 - _firstDay.getDay());
-        var _thisDayStr = getDateStr(_thisDay);
+        var _thisDayStr = getDateStr(_thisDay);  //格式化日期为字符串
         _tds[i].innerText = _thisDay.getDate();
-        //_tds[i].data = _thisDayStr;
+        // console.log("444_tds[i]", _tds[i])
+        // console.log("_tds[i].innerText", _tds[i].innerText)
         _tds[i].setAttribute('data', _thisDayStr);
-        if (_thisDayStr == inputData()) {    // 当前天
+        if (_thisDayStr == inputData()) {    // 根据需求，只高亮输入的日期
           _tds[i].className = 'currentDay';
         } else if (_thisDayStr.substr(0, 6) == getDateStr(_firstDay).substr(0, 6)) {
-          _tds[i].className = 'currentMonth';  // 当前月
+          // console.log("_thisDayStr.substr(0, 6)", _thisDayStr.substr(0, 6))
+          // console.log("getDateStr(_firstDay).substr(0, 6)", getDateStr(_firstDay).substr(0, 6))
+          _tds[i].className = 'currentMonth';  // 如果循环的日期的月份是当前月，就设置类名，
         } else {    // 其他月
           _tds[i].className = 'otherMonth';
         }
@@ -281,6 +283,21 @@
         dom['on' + eType] = function (e) {
           func(e);
         }
+      }
+    }
+
+
+    /**
+     * 添加日期绑定的事件
+     */
+    function bindAlert() {
+      var table = document.getElementById("calendarTable");
+      var tds = table.getElementsByTagName('td');
+      for (var i = 0; i < tds.length; i++) {
+        addEvent(tds[i], 'click', function (e) {
+          console.log(e.target.getAttribute('data'));
+          alert(e.target.getAttribute('data'))
+        });
       }
     }
 
@@ -317,29 +334,29 @@
      * 可以在这里使用类似的方法设置修改年的按键
      */
     function bindEventYear() {
-        var prevMonth = document.getElementById("prevYear");
-        var nextMonth = document.getElementById("nextYear");
-        addEvent(prevYear, 'click', toPrevYear);
-        addEvent(nextYear, 'click', toNextYear);
-      }
+      var prevMonth = document.getElementById("prevYear");
+      var nextMonth = document.getElementById("nextYear");
+      addEvent(prevYear, 'click', toPrevYear);
+      addEvent(nextYear, 'click', toNextYear);
+    }
 
-      /**
-     * 点击上个月图标触发
+    /**
+   * 点击上个月图标触发
+   */
+    function toPrevYear() {
+      var date = dateObj.getDate();
+      dateObj.setDate(new Date(date.getFullYear() - 1, date.getMonth(), 1));
+      showCalendarData();
+    }
+
+    /**
+     * 点击下个月图标触发
      */
-      function toPrevYear() {
-        var date = dateObj.getDate();
-        dateObj.setDate(new Date(date.getFullYear() - 1, date.getMonth(), 1));
-        showCalendarData();
-      }
-
-      /**
-       * 点击下个月图标触发
-       */
-      function toNextYear() {
-        var date = dateObj.getDate();
-        dateObj.setDate(new Date(date.getFullYear() + 1, date.getMonth(), 1));
-        showCalendarData();
-      }
+    function toNextYear() {
+      var date = dateObj.getDate();
+      dateObj.setDate(new Date(date.getFullYear() + 1, date.getMonth(), 1));
+      showCalendarData();
+    }
 
     // input输入改变，显示日历
     function showCalender() {
@@ -351,6 +368,8 @@
       bindEventMonth()
       // 绑定年
       bindEventYear()
+      // 绑定日期弹框
+      bindAlert()
     }
 
     // 根据 input 的值高亮 对应的日期

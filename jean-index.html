@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html >
+    <head>
+        <meta charset="utf-8">
+        <title>todo 事件</title>
+        <style >
+            /* 完成的样式*/
+            .done {
+                color: gray;
+                text-decoration: line-through;
+                background: blue
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- todo 的输入框 -->
+        <!-- todo 默认格式的样式 -->
+        <div class="todo-form">
+            <input id="id-input-todo" type="text">
+            <button id="id-button-add" type="button">Add</button>
+        </div>
+
+        <div id="id-div-container">
+            <div class="todo-cell">
+                <button class="todo-done">完成</button>
+                <button class="todo-delete">删除</button>
+                <span class = 'todo-content' contenteditable="true">上课</span>
+            </div>
+        </div>
+        <script src=todo_utils.js></script>
+        <script src=pure_todo.js></script>
+
+    </body>
+</html>
